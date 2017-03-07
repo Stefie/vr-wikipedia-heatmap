@@ -56,14 +56,14 @@ class VRStream extends React.Component {
           month = d.getUTCMonth(),
           daytime = (d.getUTCHours() * 60) + d.getUTCMinutes(),
           rotationDaily = (-90) + (daytime/4);
-    let rotationMonthly;
+    let rotationYearly;
     if(month < 6){
-      rotationMonthly = (15.333334) - (month * 7.66667);
+      rotationYearly = (15.333334) - (month * 7.66667);
     } else {
-      rotationMonthly = (-15.333334) + ((month-6) * 7.66667);
+      rotationYearly = (-15.333334) + ((month-6) * 7.66667);
     }
     this.setState({
-      sunRotation: `${rotationMonthly} ${rotationDaily} 0`
+      sunRotation: `${rotationYearly} ${rotationDaily} 0`
     });
   }
   _fetchEdits() {
@@ -184,7 +184,7 @@ class VRStream extends React.Component {
             <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="0 0 -10"></a-entity>
           </Entity>
           <a-entity light="type: ambient; color: #fff; intensity: 0.7"></a-entity>
-          <a-entity camera="userHeight:0" wasd-controls look-controls></a-entity>
+          <a-entity camera="userHeight:0" wasd-controls="" look-controls=""></a-entity>
         </Scene>
     </div>
     );
