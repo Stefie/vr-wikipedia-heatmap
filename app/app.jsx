@@ -43,19 +43,19 @@ class VRStream extends React.Component {
 
 
       if (isAnonymous) {
-        let color = '#37C3CA', // blue
-            radius = 0.5;
+        let color = '#ffd11a', // yellow
+            radius = 0.5,
+            type = 'flag';
 
         if(data.length){
           let dataLengthOld = data.length.old ? data.length.old : 0;
           radius = (data.length.new - dataLengthOld)/30;
-          color = '#9ED726'; //green
+          color = '#00e600', //green
+          type = 'add';
           if(radius <= 0){
-            color = '#E52929'; //red
-            radius = -radius;
-          }
-          if (radius < 0.1){
-            radius = 0.1;
+            color = '#ff0000'; //red
+            radius = -radius,
+            type = 'delete';
           }
           if (radius > 10){
             radius = 10
@@ -69,7 +69,7 @@ class VRStream extends React.Component {
         };
         Rp(options)
         .then((location) => {
-            _this._addLocations(location.latitude, location.longitude, radius, color)
+            _this._addLocations(location.latitude, location.longitude, radius, color, type)
         })
         .catch((err) => {
             console.log(err)
@@ -87,44 +87,62 @@ class VRStream extends React.Component {
       }
     return (false)
   }
-  _addLocations(lat, lng, radius, color) {
-    let phi = (90-lat) * (Math.PI/180);
-    let theta = -((lng+180) * (Math.PI/180));
+  _addLocations(lat, lng, radius, color, type) {
+    const _this = this,
+          index = this.state.edits;
+    return Promise.resolve()
+        .then(function() {
+          let phi = (90-lat) * (Math.PI/180);
+          let theta = -((lng+180) * (Math.PI/180));
+          //console.log(index);
+          const positionX = -((25 - (_this.state.edits/1000)) * Math.sin(phi) * Math.cos(theta)),
+                positionY = ((25 - (_this.state.edits/1000)) * Math.cos(phi)),
+                positionZ = ((25 - (_this.state.edits/1000)) * Math.sin(phi) * Math.sin(theta) ),
+                position = `${positionX} ${positionY} ${positionZ}`;
 
-    const positionX = -((25 - (this.state.edits/1000)) * Math.sin(phi) * Math.cos(theta)),
-          positionY = ((25 - (this.state.edits/1000)) * Math.cos(phi)),
-          positionZ = ((25 - (this.state.edits/1000)) * Math.sin(phi) * Math.sin(theta) ),
-          position = `${positionX} ${positionY} ${positionZ}`;
-
-    this.setState(previousState => ({
-      locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color}],
-      edits: previousState.edits + 1
-    }));
-    console.log('Added ' + this.state.edits + ' locations.');
+          _this.setState(previousState => ({
+            locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color, 'type': type}],
+            edits: previousState.edits + 1
+          }));
+          console.log('Added ' + _this.state.edits + ' locations.');
+        })
+        .then(function() {
+/**
+            setTimeout(function(){
+              let wrapper = document.querySelector(`.${type}`);
+              let entity = document.querySelector(`#${type}-${index}`);
+              if(wrapper == entity){
+                console.log('First element of type');
+              } else{
+                console.log(entity);
+                console.log(entity.id);
+                entity.setAttribute('geometry', 'mergeTo', '#location-wrapper');
+              }
+              console.log('I waited for: '+type + '-'+index);
+            }, 1000)
+**/
+        });
   }
 
   render() {
-    /**
-      <audio id="sonar-ping" src="./app/assets/sounds/42796__digifishmusic__sonar-ping.wav" preload="auto"></audio>
-      <audio id="ping" src="./app/assets/sounds/51702__bristolstories__ping.mp3" preload="auto"></audio>
-      <audio id="ding" src="./app/assets/sounds/91926__corsica-s__ding.wav" preload="auto"></audio>
-    **/
-
     return (
-      <Scene>
-        <a-assets>
-          <img src="./app/assets/images/natural-earth.jpg" id="globe" />
-        </a-assets>
-        <Entity
-          id="vr-wikipedia-heatmap"
-          geometry="primitive: sphere; radius: 35;"
-          material="src: #globe; shader: flat; repeat: -1 1; side: double;"
-          position="0 1 0">
-          <Locations locations={this.state.locations} />
-        </Entity>
-        <a-light type="ambient"></a-light>
-      </Scene>
-
+      <div className="scene-wrapper">
+        <Content />
+        <Scene>
+          <a-assets>
+            <img src="./app/assets/images/natural-earth.jpg" id="globe" />
+          </a-assets>
+          <Entity
+            id="vr-wikipedia-heatmap"
+            geometry="primitive: sphere; radius: 35;"
+            material="src: #globe; repeat: -1 1; side: double;"
+            position="0 0 0">
+            <Locations locations={this.state.locations} />
+          </Entity>
+          <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="-10 0 0"></a-entity>
+          <a-entity light="type: ambient; color: #fff; intensity: 0.7"></a-entity>
+        </Scene>
+    </div>
     );
   }
 }
