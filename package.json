@@ -9,7 +9,8 @@
   "scripts": {
     "start": "webpack-dev-server --hot --inline --host 0.0.0.0 --port 8040",
     "build": "webpack --config webpack.config.js",
-    "https": "webpack-dev-server --hot --https --host 0.0.0.0 --port 8040"
+    "https": "webpack-dev-server --hot --https --host 0.0.0.0 --port 8040",
+    "server": "node server.js"
   },
   "keywords": [
     "ES2015",
@@ -22,7 +23,8 @@
   "author": "Stefanie Doll",
   "license": "ISC",
   "devDependencies": {
-    "aframe": "^0.5.0",
+    "aframe": "^0.4.1",
+    "aframe-animation-component": "^3.2.2",
     "aframe-react": "^3.5.0",
     "autoprefixer": "^6.6.1",
     "autoprefixer-stylus": "^0.13.0",
@@ -35,7 +37,6 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
-    "eventsource": "^0.2.2",
     "express": "^4.15.0",
     "file-loader": "^0.10.1",
     "html-webpack-plugin": "^2.24.1",
@@ -43,6 +44,9 @@
     "jstransformer-babel": "^2.1.0",
     "postcss-loader": "^1.2.1",
     "poststylus": "^0.2.3",
+    "react-eventsource": "^1.0.0",
+    "request": "^2.80.0",
+    "request-promise-native": "^1.0.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^2.3.1",
     "url-loader": "^0.5.7",

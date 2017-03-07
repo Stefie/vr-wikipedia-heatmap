@@ -1,5 +1,3 @@
-# Twitter VR stream
+# Wikipedia edits live VR stream
 
-run node rest_server.js to start twitter server
-
-run npm start to start App
+API: https://www.mediawiki.org/wiki/API:Recent_changes_stream

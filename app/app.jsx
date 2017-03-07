@@ -2,87 +2,130 @@ import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import 'aframe';
 import {Entity, Scene} from 'aframe-react';
-import EventSource from 'eventsource';
+import rp from 'request-promise-native';
+import Locations from './components/locations.jsx';
+if (window && !window.EventSource){
+  window.EventSource = require('./js/eventsource-polyfill.js');
+}
+import EventSourceReact from 'react-eventsource';
 
 const CSS = require('./assets/styles/style.styl');
 
 class VRTwitterStream extends React.Component {
   constructor(props) {
     super(props);
-
-    this._addLocations = this._addLocations.bind(this);;
-  }
-  _fetchRecents() {
-
+    this.state = {
+      edits: 0,
+      locations: []
+    }
+    // {x: 0, y: 0, z: -10, index: 0}
+    this._addLocations = this._addLocations.bind(this);
+    this._validateIP = this._validateIP.bind(this);
+    this._fetchEdits = this._fetchEdits.bind(this);
   }
   componentWillMount(){
-    const url = 'https://stream.wikimedia.org/v2/stream/recentchange?origin=*';
 
-    console.log(`Connecting to EventStreams at ${url}`);
-    const eventSourceInitDict = {rejectUnauthorized: false};
-    const eventSource = new EventSource(url, eventSourceInitDict);
-
-    eventSource.onopen = function(event) {
-        console.log('--- Opened connection.');
-    };
-
-    eventSource.onerror = function(event) {
-        console.error('--- Encountered error', event);
-    };
-
-    eventSource.onmessage = function(event) {
-        // event.data will be a JSON string containing the message event.
-        console.log(JSON.parse(event.data));
-        /**if(event.data){
-          console.log(tweet);
-          const coordinates = tweet.geo.coordinates;
-          this._addLocations(wrapperSphere, coordinates, 'orange');
-          //io.emit('tweet', tweet);
-        }**/
-    };
   }
   componentDidMount(){
-    let wrapperSphere = document.querySelector('#vr-wikipedia-heatmap');
+    this._fetchEdits();
   }
-  _addLocations(wrapperSphere, coordinates, color) {
-    const markerColor = color || 'red';
-    let lng = coordinates[1],
-        lat = coordinates[0];
+  _fetchEdits() {
+    const eventsource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange"),
+          _this = this;
+
+    eventsource.onmessage = (message) => {
+      const data = JSON.parse(message.data),
+            user = data.user,
+            isAnonymous = _this._validateIP(user);
+
+
+      if (isAnonymous) {
+        let color = 'blue',
+            radius = 0.5,
+            positionEditType = -1;
+
+        if(data.length){
+          let dataLengthOld = data.length.old ? data.length.old : 0;
+          radius = (data.length.new - dataLengthOld)/30;
+          color = 'lime';
+          positionEditType = 1;
+          console.log(radius);
+          if(radius <= 0){
+            color = 'red';
+            radius = -radius;
+            positionEditType = 0;
+          }
+          if (radius < 0.1){
+            radius = 0.1;
+          }
+          if (radius > 10){
+            radius = 10
+          }
+        }
+
+        const options = {
+            uri: 'http://freegeoip.net/json/' + user,
+            headers: {'User-Agent': 'Request-Promise'},
+            json: true
+        };
+        rp(options)
+        .then((location) => {
+            _this._addLocations(location.latitude, location.longitude, radius, color, positionEditType)
+        })
+        .catch((err) => {
+            console.log(err)
+        });
+
+      }
+    };
+    eventsource.error = () => {
+      console.log('Error connecting to wikidata API.');
+    }
+  }
+  _validateIP(user){
+     if(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(user)){
+        return (true)
+      }
+    return (false)
+  }
+  _addLocations(lat, lng, radius, color, positionEditType) {
     let phi = (90-lat) * (Math.PI/180);
     let theta = -((lng+180) * (Math.PI/180));
 
+    const positionX = -((25 - positionEditType) * Math.sin(phi) * Math.cos(theta)),
+          positionY = ((25 - positionEditType) * Math.cos(phi)),
+          positionZ = ((25 - positionEditType) * Math.sin(phi) * Math.sin(theta) ),
+          position = `${positionX} ${positionY} ${positionZ}`;
 
-      /** marker **/
-      var marker = document.createElement('a-entity');
-      marker.id = 'value';
-      marker.setAttribute('geometry', {
-        radius: 0.2,
-        primitive: 'sphere'
-      });
-      marker.setAttribute('position', {
-        x: -(19.5 * Math.sin(phi) * Math.cos(theta)),
-        y: (19.5 * Math.cos(phi)),
-        z: (19.5 * Math.sin(phi) * Math.sin(theta))
-      });
-      marker.setAttribute('material', {color: color});
-
-      wrapperSphere.appendChild(marker);
-      console.log('Tweet added to map');
+    this.setState(previousState => ({
+      locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color}],
+      edits: previousState.edits + 1
+    }));
+    console.log('Added ' + this.state.edits + ' locations.');
   }
 
   render() {
+    /**
+      <audio id="sonar-ping" src="./app/assets/sounds/42796__digifishmusic__sonar-ping.wav" preload="auto"></audio>
+      <audio id="ping" src="./app/assets/sounds/51702__bristolstories__ping.mp3" preload="auto"></audio>
+      <audio id="ding" src="./app/assets/sounds/91926__corsica-s__ding.wav" preload="auto"></audio>
+    **/
+
     return (
       <Scene>
         <a-assets>
           <img src="./app/assets/images/natural-earth.jpg" id="globe" />
         </a-assets>
         <Entity
-          id="wikipedia"
-          geometry="primitive: sphere; radius: 20;"
-          material="src: #globe; shader: flat; repeat: -1 1; side: back;"
-          position="0 1 0" />
+          id="vr-wikipedia-heatmap"
+          geometry="primitive: sphere; radius: 40;"
+          material="src: #globe; shader: flat; repeat: -1 1; side: double;"
+          position="0 1 0">
+          <Locations locations={this.state.locations} />
+        </Entity>
         <a-light type="ambient"></a-light>
       </Scene>
+
     );
   }
 }
