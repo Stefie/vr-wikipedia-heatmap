@@ -20,15 +20,17 @@ class VRStream extends React.Component {
     this.state = {
       edits: 0,
       locations: [],
+      sunRotation: 0,
       VRMode: false
     }
     // {x: 0, y: 0, z: -10, index: 0}
     this._addLocations = this._addLocations.bind(this);
     this._validateIP = this._validateIP.bind(this);
     this._fetchEdits = this._fetchEdits.bind(this);
+    this._setTimezone = this._setTimezone.bind(this);
   }
   componentWillMount(){
-
+    this._setTimezone();
   }
   componentDidMount(){
     this._fetchEdits();
@@ -45,18 +47,37 @@ class VRStream extends React.Component {
         VRMode: false
       });
     });
+
+    //_this._addLocations(0, 0, 1, 'red', 'flag');
+  }
+  _setTimezone(){
+    /** set rotation for directional light to match global day/night-time & seasons **/
+    const d = new Date(),
+          month = d.getUTCMonth(),
+          daytime = (d.getUTCHours() * 60) + d.getUTCMinutes(),
+          rotationDaily = (-90) + (daytime/4);
+    let rotationMonthly;
+    if(month < 6){
+      rotationMonthly = (15.333334) - (month * 7.66667);
+    } else {
+      rotationMonthly = (-15.333334) + ((month-6) * 7.66667);
+    }
+    this.setState({
+      sunRotation: `${rotationMonthly} ${rotationDaily} 0`
+    });
   }
   _fetchEdits() {
     const eventsource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange"),
           _this = this;
-
+    /** connect to Wikipedia API Stream **/
     eventsource.onmessage = (message) => {
       const data = JSON.parse(message.data),
             user = data.user,
             isAnonymous = _this._validateIP(user);
 
-
+      /** Check for anonymous users with stored IP addresses **/
       if (isAnonymous) {
+        /** Set marker attributes according to type of edit **/
         let color = '#ffd11a', // yellow
             radius = 0.5,
             type = 'flag';
@@ -153,8 +174,11 @@ class VRStream extends React.Component {
             position="0 0 0">
             <Locations locations={this.state.locations} />
           </Entity>
-          <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="-10 2 0"></a-entity>
+          <Entity rotation={this.state.sunRotation}>
+            <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="0 0 -10"></a-entity>
+          </Entity>
           <a-entity light="type: ambient; color: #fff; intensity: 0.7"></a-entity>
+          <a-entity camera="userHeight:0" wasd-controls look-controls></a-entity>
         </Scene>
     </div>
     );
