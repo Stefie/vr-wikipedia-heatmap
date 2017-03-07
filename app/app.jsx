@@ -4,6 +4,8 @@ import 'aframe';
 import {Entity, Scene} from 'aframe-react';
 import Rp from 'request-promise-native';
 import Locations from './components/locations.jsx';
+import Content from './components/content.jsx';
+
 if (window && !window.EventSource){
   window.EventSource = require('./js/eventsource-polyfill.js');
 }

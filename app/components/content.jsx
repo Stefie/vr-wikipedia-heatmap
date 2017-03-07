@@ -9,8 +9,9 @@ export default class Content extends React.Component {
     return (
       <main className="page-content">
         <div>
-          <h1>Headline Component</h1>
+          <img src="./app/assets/images/wikipedia-logo.png" alt="wikipedia logo"/>
         </div>
+        <h1>Live-edit VR Heatmap</h1>
       </main>
     );
   }
