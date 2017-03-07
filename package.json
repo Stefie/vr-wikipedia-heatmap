@@ -23,7 +23,7 @@
   "author": "Stefanie Doll",
   "license": "ISC",
   "devDependencies": {
-    "aframe": "^0.4.1",
+    "aframe": "^0.5.0",
     "aframe-animation-component": "^3.2.2",
     "aframe-react": "^3.5.0",
     "autoprefixer": "^6.6.1",
