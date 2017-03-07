@@ -19,7 +19,8 @@ class VRStream extends React.Component {
     super(props);
     this.state = {
       edits: 0,
-      locations: []
+      locations: [],
+      VRMode: false
     }
     // {x: 0, y: 0, z: -10, index: 0}
     this._addLocations = this._addLocations.bind(this);
@@ -31,6 +32,19 @@ class VRStream extends React.Component {
   }
   componentDidMount(){
     this._fetchEdits();
+
+    const aScene = document.querySelector('a-scene'),
+    _this = this;
+    aScene.addEventListener('enter-vr', function(){
+      _this.setState({
+        VRMode: true
+      });
+    });
+    aScene.addEventListener('exit-vr', function(){
+      _this.setState({
+        VRMode: false
+      });
+    });
   }
   _fetchEdits() {
     const eventsource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange"),
@@ -127,7 +141,7 @@ class VRStream extends React.Component {
   render() {
     return (
       <div className="scene-wrapper">
-        <Content />
+        {!this.state.VRMode && <Content />}
         <Scene>
           <a-assets>
             <img src="./app/assets/images/natural-earth.jpg" id="globe" />
