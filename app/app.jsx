@@ -41,15 +41,15 @@ class VRStream extends React.Component {
 
 
       if (isAnonymous) {
-        let color = 'blue',
+        let color = '#37C3CA', // blue
             radius = 0.5;
 
         if(data.length){
           let dataLengthOld = data.length.old ? data.length.old : 0;
           radius = (data.length.new - dataLengthOld)/30;
-          color = 'lime';
+          color = '#9ED726'; //green
           if(radius <= 0){
-            color = 'red';
+            color = '#E52929'; //red
             radius = -radius;
           }
           if (radius < 0.1){
