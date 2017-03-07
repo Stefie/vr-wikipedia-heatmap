@@ -12,7 +12,7 @@ import EventSourceReact from 'react-eventsource';
 const ApiPort  = (location.protocol == 'https:') ? 443 : 80;
 const CSS = require('./assets/styles/style.styl');
 
-class VRTwitterStream extends React.Component {
+class VRStream extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -128,4 +128,4 @@ class VRTwitterStream extends React.Component {
 }
 
 
-ReactDOM.render(<VRTwitterStream />, document.querySelector('#root'));
+ReactDOM.render(<VRStream />, document.querySelector('#root'));
