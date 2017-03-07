@@ -64,7 +64,7 @@ class VRTwitterStream extends React.Component {
         }
 
         const options = {
-            uri: 'http://freegeoip.net/json/' + user,
+            uri: 'http://freegeoip.net:443/json/' + user,
             headers: {'User-Agent': 'Request-Promise'},
             json: true
         };
