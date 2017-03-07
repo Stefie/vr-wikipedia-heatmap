@@ -2,13 +2,14 @@ import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import 'aframe';
 import {Entity, Scene} from 'aframe-react';
-import rp from 'request-promise-native';
+import Rp from 'request-promise-native';
 import Locations from './components/locations.jsx';
 if (window && !window.EventSource){
   window.EventSource = require('./js/eventsource-polyfill.js');
 }
 import EventSourceReact from 'react-eventsource';
 
+const ApiPort  = (location.protocol == 'https:') ? 443 : 80;
 const CSS = require('./assets/styles/style.styl');
 
 class VRTwitterStream extends React.Component {
@@ -64,11 +65,11 @@ class VRTwitterStream extends React.Component {
         }
 
         const options = {
-            uri: 'http://freegeoip.net:443/json/' + user+'?callback',
+            uri: `http://freegeoip.net:${ApiPort}/json/${user}`,
             headers: {'User-Agent': 'Request-Promise'},
             json: true
         };
-        rp(options)
+        Rp(options)
         .then((location) => {
             _this._addLocations(location.latitude, location.longitude, radius, color, positionEditType)
         })
