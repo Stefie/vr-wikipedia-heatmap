@@ -9,9 +9,7 @@ export default class Locations extends React.Component {
     super(props);
   }
   render() {
-    const sounds = ['#sonar-ping', '#ping', '#ding'],
-          sound = sounds[Math.floor(Math.random() * sounds.length)];
-          //sound={{src: sound, autoplay: true, poolSize: 5}}
+    // animation="property: material.opacity; easing: easeOutCubic; dur: 3000; to: 0.7"
     return (
       <Entity id="location-wrapper">
         {this.props.locations.map(function(location) {
@@ -21,11 +19,12 @@ export default class Locations extends React.Component {
                     key={location.index}
                     geometry={{
                       primitive: 'sphere',
-                      radius: location.radius}}
+                      radius: location.radius,
+                      segmentsWidth: 12,
+                      segmentsHeight: 12}}
                     position={location.position}
-                    material={{color: location.color, transparent: true}}
-                    animation="property: material.opacity; easing: easeOutCubic; dur: 3000; to: 0.7"
-                    animation__radius="property: geometry.radius; dur: 3000; easing: easeOutCubic; to: 0.3" />
+                    material={{color: location.color}}
+                    animation="property: geometry.radius; dur: 3000; easing: easeOutCubic; to: 0.3" />
         }.bind(this))}
       </Entity>
     );
