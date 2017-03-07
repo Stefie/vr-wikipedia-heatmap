@@ -139,7 +139,7 @@ class VRStream extends React.Component {
             position="0 0 0">
             <Locations locations={this.state.locations} />
           </Entity>
-          <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="-10 0 0"></a-entity>
+          <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="-10 2 0"></a-entity>
           <a-entity light="type: ambient; color: #fff; intensity: 0.7"></a-entity>
         </Scene>
     </div>
