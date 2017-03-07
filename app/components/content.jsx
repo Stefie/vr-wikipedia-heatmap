@@ -10,7 +10,6 @@ export default class Content extends React.Component {
       <main className="page-content">
         <div>
           <h1>Headline Component</h1>
-          <p>Dummy React component</p>
         </div>
       </main>
     );

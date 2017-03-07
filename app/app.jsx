@@ -42,19 +42,15 @@ class VRTwitterStream extends React.Component {
 
       if (isAnonymous) {
         let color = 'blue',
-            radius = 0.5,
-            positionEditType = -1;
+            radius = 0.5;
 
         if(data.length){
           let dataLengthOld = data.length.old ? data.length.old : 0;
           radius = (data.length.new - dataLengthOld)/30;
           color = 'lime';
-          positionEditType = 1;
-          console.log(radius);
           if(radius <= 0){
             color = 'red';
             radius = -radius;
-            positionEditType = 0;
           }
           if (radius < 0.1){
             radius = 0.1;
@@ -71,7 +67,7 @@ class VRTwitterStream extends React.Component {
         };
         Rp(options)
         .then((location) => {
-            _this._addLocations(location.latitude, location.longitude, radius, color, positionEditType)
+            _this._addLocations(location.latitude, location.longitude, radius, color)
         })
         .catch((err) => {
             console.log(err)
@@ -89,13 +85,13 @@ class VRTwitterStream extends React.Component {
       }
     return (false)
   }
-  _addLocations(lat, lng, radius, color, positionEditType) {
+  _addLocations(lat, lng, radius, color) {
     let phi = (90-lat) * (Math.PI/180);
     let theta = -((lng+180) * (Math.PI/180));
 
-    const positionX = -((25 - positionEditType) * Math.sin(phi) * Math.cos(theta)),
-          positionY = ((25 - positionEditType) * Math.cos(phi)),
-          positionZ = ((25 - positionEditType) * Math.sin(phi) * Math.sin(theta) ),
+    const positionX = -((25 - (this.state.edits/1000)) * Math.sin(phi) * Math.cos(theta)),
+          positionY = ((25 - (this.state.edits/1000)) * Math.cos(phi)),
+          positionZ = ((25 - (this.state.edits/1000)) * Math.sin(phi) * Math.sin(theta) ),
           position = `${positionX} ${positionY} ${positionZ}`;
 
     this.setState(previousState => ({
@@ -119,7 +115,7 @@ class VRTwitterStream extends React.Component {
         </a-assets>
         <Entity
           id="vr-wikipedia-heatmap"
-          geometry="primitive: sphere; radius: 40;"
+          geometry="primitive: sphere; radius: 35;"
           material="src: #globe; shader: flat; repeat: -1 1; side: double;"
           position="0 1 0">
           <Locations locations={this.state.locations} />
