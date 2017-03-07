@@ -92,11 +92,14 @@ class VRStream extends React.Component {
             radius = -radius,
             type = 'delete';
           }
-          if (radius > 10){
+          if(radius < 0.1){
+            radius = 0.1;
+          }
+          if (radius >= 10){
             radius = 10
           }
         }
-
+        /** Look up coordinates for IP address of anonymous user **/
         const options = {
             uri: `http://freegeoip.net:${ApiPort}/json/${user}`,
             headers: {'User-Agent': 'Request-Promise'},
@@ -104,6 +107,7 @@ class VRStream extends React.Component {
         };
         Rp(options)
         .then((location) => {
+            /** Add marker if IP lookup was successful **/
             _this._addLocations(location.latitude, location.longitude, radius, color, type)
         })
         .catch((err) => {
@@ -117,6 +121,7 @@ class VRStream extends React.Component {
     }
   }
   _validateIP(user){
+    /** check if user has a valid IP **/
      if(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(user)){
         return (true)
       }
@@ -125,6 +130,7 @@ class VRStream extends React.Component {
   _addLocations(lat, lng, radius, color, type) {
     const _this = this,
           index = this.state.edits;
+
     return Promise.resolve()
         .then(function() {
           let phi = (90-lat) * (Math.PI/180);
