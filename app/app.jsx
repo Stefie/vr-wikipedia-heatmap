@@ -9,7 +9,6 @@ import Content from './components/content.jsx';
 if (window && !window.EventSource){
   window.EventSource = require('./js/eventsource-polyfill.js');
 }
-import EventSourceReact from 'react-eventsource';
 
 const ApiPort  = (location.protocol == 'https:') ? 443 : 80;
 const CSS = require('./assets/styles/style.styl');
@@ -29,7 +28,6 @@ class VRStream extends React.Component {
     this._validateIP = this._validateIP.bind(this);
     this._fetchEdits = this._fetchEdits.bind(this);
     this._setTimezone = this._setTimezone.bind(this);
-    this._randomLocationForDev = this._randomLocationForDev.bind(this);
   }
   componentWillMount(){
     this._setTimezone();
@@ -50,16 +48,8 @@ class VRStream extends React.Component {
       });
     });
   }
-  _randomLocationForDev(number){
-    let cord = function getRandomArbitrary(min, max) {
-      return Math.random() * (max - min) + min;
-    }
-    for (let i=0; i < number; i++) {
-       this._addLocations(cord(-180, 180), cord(-180, 180), (Math.random() * 10), 'red', 'add', `A Wikipedia edit ${Math.random() * 100000}`);
-    }
-  }
   _setTimezone(){
-    /** set rotation for directional light to match global day/night-time & seasons **/
+    // set rotation for directional light to match global day/night-time & seasons
     const d = new Date(),
           month = d.getUTCMonth(),
           daytime = (d.getUTCHours() * 60) + d.getUTCMinutes(),
@@ -75,17 +65,29 @@ class VRStream extends React.Component {
     });
   }
   _fetchEdits() {
+
+    let randomLocationForDev = ((number) => {
+      let cord = function getRandomArbitrary(min, max) {
+        return Math.random() * (max - min) + min;
+      }
+      for (let i=0; i < number; i++) {
+         this._addLocations(cord(-180, 180), cord(-180, 180), (Math.random() * 10), 'blue', 'add', `A Wikipedia edit ${Math.random() * 100000}`);
+      }
+    });
+
+    // open event stream
     const eventsource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange"),
           _this = this;
-    /** connect to Wikipedia API Stream **/
+    // connect to Wikipedia API Stream
     eventsource.onmessage = (message) => {
       const data = JSON.parse(message.data),
             user = data.user,
             isAnonymous = _this._validateIP(user);
 
-      /** Check for anonymous users with stored IP addresses **/
+      // Check for anonymous users with stored IP addresses
       if (isAnonymous) {
-        /** Set marker attributes according to type of edit **/
+
+        // Set marker attributes according to type of edit
         let color = '#ffd11a', // yellow
             radius = 0.5,
             type = 'flag';
@@ -107,8 +109,24 @@ class VRStream extends React.Component {
             radius = 10
           }
         }
-        //this._randomLocationForDev(1);
-        /** Look up coordinates for IP address of anonymous user **/
+        //randomLocationForDev(1);
+
+        /**
+        const url = `http://freegeoip.net:${ApiPort}/json/${user}`;
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url);
+        xhr.addEventListener('load', function() {
+          if (xhr.status >= 200 && xhr.status <= 299) {
+            const location = JSON.parse(xhr.response);
+            _this._addLocations(location.latitude, location.longitude, radius, color, type, data.title);
+          } else {
+            console.error('Error fetching coordinates!');
+          }
+        });
+        xhr.send();
+        **/
+
+        // Look up coordinates for IP address of anonymous user
         const options = {
             uri: `http://freegeoip.net:${ApiPort}/json/${user}`,
             headers: {'User-Agent': 'Request-Promise'},
@@ -116,7 +134,7 @@ class VRStream extends React.Component {
         };
         Rp(options)
         .then((location) => {
-            /** Add marker if IP lookup was successful **/
+            //  Add marker if IP lookup was successful
             _this._addLocations(location.latitude, location.longitude, radius, color, type, data.title)
         })
         .catch((err) => {
@@ -127,9 +145,10 @@ class VRStream extends React.Component {
     eventsource.error = () => {
       console.log('Error connecting to wikidata API.');
     }
+
   }
   _validateIP(user){
-    /** check if user has a valid IP **/
+    //  check if user has a valid IP
      if(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(user)){
         return (true)
       }
