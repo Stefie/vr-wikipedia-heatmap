@@ -11,7 +11,7 @@ export default class Content extends React.Component {
         <div>
           <img src="./app/assets/images/wikipedia-logo.png" alt="wikipedia logo"/>
         </div>
-        <h1>Live-edit VR Heatmap</h1>
+        <h1>{this.props.title}</h1>
       </main>
     );
   }

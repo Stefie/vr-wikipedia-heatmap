@@ -20,6 +20,7 @@ class VRStream extends React.Component {
     this.state = {
       edits: 0,
       locations: [],
+      editTitle:'VR Live Edit Heatmap',
       sunRotation: 0,
       VRMode: false
     }
@@ -28,6 +29,7 @@ class VRStream extends React.Component {
     this._validateIP = this._validateIP.bind(this);
     this._fetchEdits = this._fetchEdits.bind(this);
     this._setTimezone = this._setTimezone.bind(this);
+    this._randomLocationForDev = this._randomLocationForDev.bind(this);
   }
   componentWillMount(){
     this._setTimezone();
@@ -47,8 +49,14 @@ class VRStream extends React.Component {
         VRMode: false
       });
     });
-
-    //_this._addLocations(0, 0, 1, 'red', 'flag');
+  }
+  _randomLocationForDev(number){
+    let cord = function getRandomArbitrary(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+    for (let i=0; i < number; i++) {
+       this._addLocations(cord(-180, 180), cord(-180, 180), (Math.random() * 10), 'red', 'add', `A Wikipedia edit ${Math.random() * 100000}`);
+    }
   }
   _setTimezone(){
     /** set rotation for directional light to match global day/night-time & seasons **/
@@ -99,6 +107,7 @@ class VRStream extends React.Component {
             radius = 10
           }
         }
+        //this._randomLocationForDev(1);
         /** Look up coordinates for IP address of anonymous user **/
         const options = {
             uri: `http://freegeoip.net:${ApiPort}/json/${user}`,
@@ -108,12 +117,11 @@ class VRStream extends React.Component {
         Rp(options)
         .then((location) => {
             /** Add marker if IP lookup was successful **/
-            _this._addLocations(location.latitude, location.longitude, radius, color, type)
+            _this._addLocations(location.latitude, location.longitude, radius, color, type, data.title)
         })
         .catch((err) => {
             console.log(err)
         });
-
       }
     };
     eventsource.error = () => {
@@ -127,7 +135,7 @@ class VRStream extends React.Component {
       }
     return (false)
   }
-  _addLocations(lat, lng, radius, color, type) {
+  _addLocations(lat, lng, radius, color, type, title) {
     const _this = this,
           index = this.state.edits;
 
@@ -135,7 +143,7 @@ class VRStream extends React.Component {
         .then(function() {
           let phi = (90-lat) * (Math.PI/180);
           let theta = -((lng+180) * (Math.PI/180));
-          //console.log(index);
+
           const positionX = -((25 - (_this.state.edits/1000)) * Math.sin(phi) * Math.cos(theta)),
                 positionY = ((25 - (_this.state.edits/1000)) * Math.cos(phi)),
                 positionZ = ((25 - (_this.state.edits/1000)) * Math.sin(phi) * Math.sin(theta) ),
@@ -143,7 +151,8 @@ class VRStream extends React.Component {
 
           _this.setState(previousState => ({
             locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color, 'type': type}],
-            edits: previousState.edits + 1
+            edits: previousState.edits + 1,
+            editTitle: title
           }));
           console.log('Added ' + _this.state.edits + ' locations.');
         })
@@ -155,11 +164,9 @@ class VRStream extends React.Component {
               if(wrapper == entity){
                 console.log('First element of type');
               } else{
-                console.log(entity);
                 console.log(entity.id);
-                entity.setAttribute('geometry', 'mergeTo', '#location-wrapper');
+                entity.setAttribute('geometry', 'mergeTo', `#${entity.id}}``);
               }
-              console.log('I waited for: '+type + '-'+index);
             }, 1000)
 **/
         });
@@ -168,7 +175,7 @@ class VRStream extends React.Component {
   render() {
     return (
       <div className="scene-wrapper">
-        {!this.state.VRMode && <Content />}
+        {!this.state.VRMode && <Content title={this.state.editTitle} />}
         <Scene>
           <a-assets>
             <img src="./app/assets/images/natural-earth.jpg" id="globe" />
