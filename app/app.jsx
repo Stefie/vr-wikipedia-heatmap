@@ -195,6 +195,7 @@ class VRStream extends React.Component {
     return (
       <div className="scene-wrapper">
         {!this.state.VRMode && <Content title={this.state.editTitle} />}
+        {this.state.connectionError}
         <Scene>
           <a-assets>
             <img src="./app/assets/images/natural-earth.jpg" id="globe" />
