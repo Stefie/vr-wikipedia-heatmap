@@ -206,16 +206,12 @@ class VRStream extends React.Component {
             position="0 0 0">
             <Locations locations={this.state.locations} />
           </Entity>
-          <Entity rotation={this.state.sunRotation}>
-            <a-entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="0 0 -10"></a-entity>
-          </Entity>
-          <a-entity light="type: ambient; color: #fff; intensity: 0.7"></a-entity>
-          <a-entity camera="userHeight:0" wasd-controls="" look-controls=""></a-entity>
+          <Lights />
+          <Entity camera="userHeight:0" wasd-controls="" look-controls="" />
         </Scene>
     </div>
     );
   }
 }
-
 
 ReactDOM.render(<VRStream />, document.querySelector('#root'));
