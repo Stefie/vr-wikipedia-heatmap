@@ -20,7 +20,6 @@ module.exports = {
     net: 'empty',
     tls: 'empty'
   },
-  externals: ['ws'],
   module: {
     // npParse === aframe Bugfix for console warning
     noParse: [
@@ -40,14 +39,21 @@ module.exports = {
         loader: 'json-loader'
       },{
         test: /\.styl$/,
-        loader: 'style-loader!css-loader!stylus-loader'
+        loader: 'style-loader!css-loader!stylus-loader',
       },
       { test: /\.(png|jpg|woff|woff2|eot|ttf|svg)(\?[a-z0-9=&.]+)?$/, loader: 'url-loader?limit=100000' }
     ]
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        stylus: {
+          use: [poststylus([ 'autoprefixer' ])]
+        }
+      }
+    }),
     new HtmlWebpackPlugin({
-      title: 'A-Frame Curverimge Calculator',
+      title: 'Wikipedia Edits VR Heatmap',
       template: __dirname + '/app/index.html',
       inject: 'body',
       files: {
