@@ -8,10 +8,10 @@ export default class Content extends React.Component {
   render() {
     return (
       <main className="page-content">
-        <div>
+        <div className="logo">
           <img src="./app/assets/images/wikipedia-logo.png" alt="wikipedia logo"/>
         </div>
-        <h1>{this.props.title}</h1>
+        <h1 className="edit-title">{this.props.title}</h1>
       </main>
     );
   }
