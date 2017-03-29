@@ -1,5 +1,5 @@
 {
-  "name": "Wikipedia VR Heatmap",
+  "name": "vr-wikipedia-heatmap",
   "description": "Live heatmap of worldwide Wikipedia edits in WebVR - built with A-Frame",
   "version": "1.0.0",
   "repository": {
