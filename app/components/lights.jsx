@@ -36,7 +36,7 @@ export default class Lights extends React.Component {
         <Entity rotation={this.state.sunRotation}>
           <Entity light="type: directional; color: #ffe6cc; intensity: 0.6" position="0 0 -10" />
         </Entity>
-        <Entity light="type: ambient; color: #fff; intensity: 0.7" />
+        <Entity light="type: ambient; color: #fff; intensity: 0.6" />
       </Entity>
     );
   }

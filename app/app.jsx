@@ -193,30 +193,19 @@ class VRStream extends React.Component {
     return (false)
   }
   _addLocations(lat, lng, radius, color, type, title) {
-    const _this = this,
-          index = this.state.edits;
+    const index = this.state.edits,
+          phi = (90-lat) * (Math.PI/180),
+          theta = -((lng+180) * (Math.PI/180)),
+          positionX = -((25 - (index/1000)) * Math.sin(phi) * Math.cos(theta)),
+          positionY = ((25 - (index/1000)) * Math.cos(phi)),
+          positionZ = ((25 - (index/1000)) * Math.sin(phi) * Math.sin(theta) ),
+          position = `${positionX} ${positionY} ${positionZ}`;
 
-    return Promise.resolve()
-      .then(function() {
-        // calculate marker position on globe
-        let phi = (90-lat) * (Math.PI/180);
-        let theta = -((lng+180) * (Math.PI/180));
-
-        const positionX = -((25 - (_this.state.edits/1000)) * Math.sin(phi) * Math.cos(theta)),
-              positionY = ((25 - (_this.state.edits/1000)) * Math.cos(phi)),
-              positionZ = ((25 - (_this.state.edits/1000)) * Math.sin(phi) * Math.sin(theta) ),
-              position = `${positionX} ${positionY} ${positionZ}`;
-
-        _this.setState(previousState => ({
-          locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color, 'type': type}],
-          edits: previousState.edits + 1,
-          editTitle: `Edit: ${title}`
-        }));
-      })
-      .then(function() {
-        /** ToDo: Merge marker entities after animation for better performance **/
-        /** setTimeout(function(){ }, 3000) **/
-      });
+    this.setState(previousState => ({
+      locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color, 'type': type}],
+      edits: previousState.edits + 1,
+      editTitle: title
+    }));
   }
 
   render() {

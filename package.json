@@ -1,24 +1,24 @@
 {
-  "name": "Baseproject_webpack",
-  "description": "Basic project setup with ES2015, webpack, react, Babel, stylus, aframe",
+  "name": "Wikipedia VR Heatmap",
+  "description": "Live heatmap of worldwide Wikipedia edits in WebVR - built with A-Frame",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com:Stefie/baseproject_webpack.git"
+    "url": "git@github.com:Stefie/vr-wikipedia-heatmap.git"
   },
   "scripts": {
     "start": "webpack-dev-server --hot --inline --host 0.0.0.0 --port 8040",
     "build": "webpack --config webpack.config.js",
-    "https": "webpack-dev-server --hot --https --host 0.0.0.0 --port 8040",
-    "server": "node server.js"
+    "https": "webpack-dev-server --hot --https --host 0.0.0.0 --port 8040"
   },
   "keywords": [
-    "ES2015",
-    "babel",
-    "react",
-    "playground",
-    "webpack",
-    "aframe"
+    "VR",
+    "WebVR",
+    "Wikipedia",
+    "API",
+    "Edits",
+    "aframe",
+    "heatmap"
   ],
   "author": "Stefanie Doll",
   "license": "ISC",

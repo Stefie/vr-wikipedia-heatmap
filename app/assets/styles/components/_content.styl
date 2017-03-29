@@ -4,11 +4,11 @@
 
 h1
 h2
-  margin-top: 10px
+  margin-top: 0
   font-weight normal
   font-size 20px
   text-shadow: 1px 1px #808080;
-  @media screen and (max-width: 568px)
+  @media screen and (max-width: 768px)
     margin-top 0
     font-size 13px
     min-width: 100px
@@ -22,13 +22,18 @@ h2
     position absolute
     z-index 100
     padding: $layoutSpace
-    @media screen and (max-width: 568px)
+    @media screen and (max-width: 768px)
       padding $layoutSpaceHalf
   .logo
-    width 181px
-    @media screen and (max-width: 568px)
-      width 100px
+    width 140px
+    @media screen and (max-width: 768px)
+      width 70px
     img
       width 100%
   .edit-title
-    bottom 0
+    top 36px
+    left 140px
+    padding-left 0
+    @media screen and (max-width: 768px)
+      top 17px
+      left 70px
