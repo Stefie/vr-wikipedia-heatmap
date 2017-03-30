@@ -6,6 +6,7 @@ import Rp from 'request-promise-native';
 import Locations from './components/locations.jsx';
 import Content from './components/content.jsx';
 import Lights from './components/lights.jsx';
+import GitHub from './components/githubLink.jsx';
 
 if (window && !window.EventSource){
   window.EventSource = require('./js/eventsource-polyfill.js');
@@ -211,7 +212,7 @@ class VRStream extends React.Component {
   render() {
     return (
       <div className="scene-wrapper">
-        {!this.state.VRMode && <Content title={this.state.editTitle} />}
+        {!this.state.VRMode && <div><Content title={this.state.editTitle} /><GitHub /></div>}
         {this.state.connectionError}
         <Scene>
           <a-assets>

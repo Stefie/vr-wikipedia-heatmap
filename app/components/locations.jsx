@@ -9,6 +9,7 @@ export default class Locations extends React.Component {
     super(props);
   }
   render() {
+    //
     return (
       <Entity id="location-wrapper">
         {this.props.locations.map(function(location) {
@@ -20,7 +21,11 @@ export default class Locations extends React.Component {
                       primitive: 'sphere',
                       radius: location.radius,
                       segmentsWidth: 18,
-                      segmentsHeight: 18}}
+                      segmentsHeight: 18,
+                      buffer: false,
+                      skipCache: true,
+                      mergeTo: '#collection'
+                    }}
                     position={location.position}
                     material={{color: location.color}}
                     animation="property: geometry.radius; dur: 3000; easing: easeOutCubic; to: 0.3" />
