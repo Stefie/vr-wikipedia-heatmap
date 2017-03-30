@@ -27,7 +27,7 @@ export default class Locations extends React.Component {
                       mergeTo: '#collection'
                     }}
                     position={location.position}
-                    material={{color: location.color}}
+                    material={{color: location.color, shader: 'flat'}}
                     animation="property: geometry.radius; dur: 3000; easing: easeOutCubic; to: 0.3" />
         }.bind(this))}
       </Entity>
