@@ -194,6 +194,12 @@ class VRStream extends React.Component {
     return (false)
   }
   _addLocations(lat, lng, radius, color, type, title) {
+    // show a maximum number of 150 locations
+    if(this.state.locations.length >= 150){
+      this.setState(previousState => ({
+        locations: previousState.locations.filter((_, i) => i !== 0)
+      }));
+    }
     const index = this.state.edits,
           phi = (90-lat) * (Math.PI/180),
           theta = -((lng+180) * (Math.PI/180)),
@@ -203,16 +209,19 @@ class VRStream extends React.Component {
           position = `${positionX} ${positionY} ${positionZ}`;
 
     this.setState(previousState => ({
-      locations: [...previousState.locations, {'position': position, 'index': previousState.edits, 'radius': radius, 'color': color, 'type': type}],
+      locations: [...previousState.locations, {'position': position, 'index': index, 'radius': radius, 'color': color, 'type': type}],
       edits: previousState.edits + 1,
       editTitle: title
     }));
   }
-
   render() {
     return (
       <div className="scene-wrapper">
-        {!this.state.VRMode && <div><Content title={this.state.editTitle} /><GitHub /></div>}
+        {!this.state.VRMode &&
+          <div>
+            <Content title={this.state.editTitle} />
+            <GitHub />
+          </div>}
         {this.state.connectionError}
         <Scene>
           <a-assets>
