@@ -225,15 +225,15 @@ class VRStream extends React.Component {
         {this.state.connectionError}
         <Scene>
           <a-assets>
-            <img src="./app/assets/images/natural-earth.jpg" id="globe" />
+            <img src="./app/assets/images/natural-earth-small.jpeg" id="globe" />
           </a-assets>
           <Entity
             id="vr-wikipedia-heatmap"
-            geometry="primitive: sphere; radius: 27;"
-            material="src: #globe; repeat: -1 1; side: double;"
+            geometry="primitive: sphere; radius: 27; segmentsWidth: 18;"
+            material="src: #globe; repeat: -1 1; side: back;"
             position="0 0 0">
-            <Locations locations={this.state.locations} />
           </Entity>
+          <Locations locations={this.state.locations} />
           <Lights />
           <Entity camera="userHeight:0" wasd-controls="" look-controls="" />
         </Scene>
