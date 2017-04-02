@@ -24,7 +24,7 @@ class VRStream extends React.Component {
       locations: [],
       storedIPs: [],
       ipCoordinates: [],
-      editTitle:'Wikipedia VR Recent Changes Heatmap',
+      editTitle:'Wikipedia WebVR Recent Changes Heatmap',
       overlay: false,
       globeSrc: false,
       VRMode: false,
