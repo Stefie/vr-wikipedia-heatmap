@@ -7,6 +7,7 @@ import Locations from './components/locations.jsx';
 import Content from './components/content.jsx';
 import Lights from './components/lights.jsx';
 import GitHub from './components/githubLink.jsx';
+import {Welcome, ConnectionError, APIError, Loading} from './components/messages.jsx';
 
 if (window && !window.EventSource){
   window.EventSource = require('./js/eventsource-polyfill.js');
@@ -23,9 +24,11 @@ class VRStream extends React.Component {
       locations: [],
       storedIPs: [],
       ipCoordinates: [],
-      editTitle:'VR Live Edit Heatmap',
-      connectionError: false,
+      editTitle:'Wikipedia VR Recent Changes Heatmap',
+      overlay: false,
+      globeSrc: false,
       VRMode: false,
+      mapSouce: false,
       isIos: /(iPad|iPhone|iPod)/g.test(navigator.userAgent),
       tabIsVisible: true
     }
@@ -39,11 +42,23 @@ class VRStream extends React.Component {
     this.reconnect = null;
     this.eventsource = null;
   }
+  componentWillMount(){
+    this.setState({
+      overlay: <Welcome startFunction={() => this._fetchEdits()} />
+    });
+  }
   componentDidMount(){
-    this._fetchEdits();
-
     const aScene = document.querySelector('a-scene'),
-    _this = this;
+          _this = this;
+    if(aScene.isMobile){
+      this.setState({
+        globeSrc: './app/assets/images/natural-earth-small.jpeg'
+      });
+    } else {
+      this.setState({
+        globeSrc: './app/assets/images/natural-earth.jpg'
+      });
+    }
     aScene.addEventListener('enter-vr', function(){
       _this.setState({
         VRMode: true
@@ -106,6 +121,9 @@ class VRStream extends React.Component {
   }
   _fetchEdits() {
     // connect to Wikipedia API Stream
+    this.setState({
+      overlay: <Loading />
+    });
     this.eventsource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange");
     this.eventsource.onmessage = (message) => {
       // only add new markers when tab is focused/ visible
@@ -113,7 +131,7 @@ class VRStream extends React.Component {
     };
     this.eventsource.onerror = (error) => {
       this.setState({
-        connectionError: <div className="connection-error"><h2>Error connecting to Wikidata API.</h2></div>
+        overlay: <APIError />
       });
     }
 
@@ -176,13 +194,13 @@ class VRStream extends React.Component {
         this.setState(previousState => ({
           storedIPs:  [...previousState.storedIPs, user],
           ipCoordinates: [...previousState.ipCoordinates, { user, 'coordinates': [location.latitude, location.longitude]}],
-          connectionError: false
+          overlay: false
         }));
         this._addLocations(location.latitude, location.longitude, radius, color, type, title);
     })
     .catch((err) => {
       this.setState({
-        connectionError: <div className="connection-error"><h2>Error while fetching geo coordinates.</h2><p>Either the API is down or you're using an AdBlocker.</p><p>This page is unable to fetch the geo coordinates of the Wikipedia edits with your AdBlocker enabled.</p><p>Please consider turning it off while looking at this page.</p></div>
+        overlay: <ConnectionError />
       });
     });
   }
@@ -194,25 +212,28 @@ class VRStream extends React.Component {
     return (false)
   }
   _addLocations(lat, lng, radius, color, type, title) {
-    // show a maximum number of 150 locations
-    if(this.state.locations.length >= 150){
-      this.setState(previousState => ({
-        locations: previousState.locations.filter((_, i) => i !== 0)
-      }));
-    }
     const index = this.state.edits,
           phi = (90-lat) * (Math.PI/180),
           theta = -((lng+180) * (Math.PI/180)),
-          positionX = -((25 - (index/1000)) * Math.sin(phi) * Math.cos(theta)),
-          positionY = ((25 - (index/1000)) * Math.cos(phi)),
-          positionZ = ((25 - (index/1000)) * Math.sin(phi) * Math.sin(theta) ),
+          positionX = -((25 - (index/500)) * Math.sin(phi) * Math.cos(theta)),
+          positionY = ((25 - (index/500)) * Math.cos(phi)),
+          positionZ = ((25 - (index/500)) * Math.sin(phi) * Math.sin(theta) ),
           position = `${positionX} ${positionY} ${positionZ}`;
 
-    this.setState(previousState => ({
-      locations: [...previousState.locations, {'position': position, 'index': index, 'radius': radius, 'color': color, 'type': type}],
-      edits: previousState.edits + 1,
-      editTitle: title
-    }));
+    // show a maximum number of 150 locations
+    if(this.state.locations.length >= 150){
+      this.setState(previousState => ({
+        locations: [...previousState.locations.filter((_, i) => i !== 0), {'position': position, 'index': index, 'radius': radius, 'color': color, 'type': type}],
+        edits: previousState.edits + 1,
+        editTitle: title
+      }));
+    } else {
+      this.setState(previousState => ({
+        locations: [...previousState.locations, {'position': position, 'index': index, 'radius': radius, 'color': color, 'type': type}],
+        edits: previousState.edits + 1,
+        editTitle: title
+      }));
+    }
   }
   render() {
     return (
@@ -222,10 +243,10 @@ class VRStream extends React.Component {
             <Content title={this.state.editTitle} />
             <GitHub />
           </div>}
-        {this.state.connectionError}
+        {this.state.overlay}
         <Scene>
           <a-assets>
-            <img src="./app/assets/images/natural-earth-small.jpeg" id="globe" />
+            <img src={this.state.globeSrc} id="globe" />
           </a-assets>
           <Entity
             id="vr-wikipedia-heatmap"

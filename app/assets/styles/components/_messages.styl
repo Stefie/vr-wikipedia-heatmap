@@ -1,0 +1,93 @@
+.overlay
+  position absolute
+  width 100%
+  height 100%
+  padding 80px $layoutSpace $layoutSpace $layoutSpace
+  display flex
+  flex-direction column
+  justify-content center
+  align-items center
+  line-height 1.8
+  text-align center
+  overflow scroll
+  &.welcome
+    z-index 10000
+    background-color $colorBlack
+  h2
+  p
+    z-index 100
+    position relative
+  h2
+    font-size 20px
+    margin-bottom $layoutSpaceHalf
+    @media screen and (min-width: 769px)
+      font-size 38px
+      margin-bottom $layoutSpace
+    .connection-error&
+      color $colorError
+  .start-stream
+    background-color $colorWhite
+    padding 13px $layoutSpace $layoutSpaceHalf
+    line-height 1.2em
+    display inline-block
+    color $colorBlack
+    font-weight bold
+    text-transform uppercase
+    text-decoration none
+    margin-top $layoutSpace
+    border-radius 5px
+  .legend
+    text-align left
+    p
+      &:before
+        width 12px
+        height 12px
+        border-radius 50%
+        background-color #00e600
+        content ''
+        display inline-block
+        margin-right $layoutSpaceHalf
+        @media screen and (min-width: 769px)
+          width 18px
+          height 18px
+      &.deleted:before
+        background-color #ff0000
+      &.flagged:before
+        background-color #ffd11a
+
+.loading
+  .spinner
+    width: 80px;
+    height: 80px;
+    position: relative;
+    margin: 30px auto;
+    @media screen and (max-width: 769px)
+      margin 10px auto
+  .double-bounce1, .double-bounce2
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #fff;
+    opacity: 0.6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+    animation: sk-bounce 2.0s infinite ease-in-out;
+  .double-bounce2
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+  @-webkit-keyframes sk-bounce
+    0%
+    100%
+      -webkit-transform: scale(0.0)
+    50%
+      -webkit-transform: scale(1.0)
+  @keyframes sk-bounce
+    0%
+    100%
+      transform: scale(0.0);
+      -webkit-transform: scale(0.0);
+    50%
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
