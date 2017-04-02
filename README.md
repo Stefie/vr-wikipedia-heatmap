@@ -8,7 +8,7 @@ The size of the marker represents the number of lines changed, the colors show t
 |<img src="app/assets/images/screen-desktop.jpg" alt="screenshot" />|<img src="app/assets/images/screen-mobile.jpg" alt="screenshot" />|
 | --- | --- |
 
-__Built with:__ <a href="https://aframe.io/" title="Visit page" target="_blank">A-Frame</a>
+__Built with:__ <a href="https://aframe.io/" title="Visit page" target="_blank">A-Frame</a> & <a href="https://www.npmjs.com/package/aframe-react" title="Visit page" target="_blank">A-Frame React</a>
 
 __IP lookup:__ <a href="https://freegeoip.net/" title="Visit page" target="_blank">freegeoip.net API</a>
 
