@@ -5,6 +5,8 @@ It uses the <a href="https://www.mediawiki.org/wiki/API:Recent_changes_stream" t
 
 The size of the marker represents the number of lines changed, the colors show the different types of edits.
 
+The Light in the scene represents the position of the sun at the time you're loading the page.
+
 |<img src="app/assets/images/screen-desktop.jpg" alt="screenshot" />|<img src="app/assets/images/screen-mobile.jpg" alt="screenshot" />|
 | --- | --- |
 
