@@ -9,7 +9,7 @@ export class Welcome extends React.Component {
     return (
       <div className="overlay welcome">
         <h2>Welcome!</h2>
-        <p>This App shows you the 150 most recent changes to Wikipedia entries on a VR-Globe</p>
+        <p>This App shows you the 150 most recent changes to Wikipedia entries as a livestream on a VR-Globe</p>
         <div className="legend">
           <p className="added">Lines added</p>
           <p className="deleted">Lines deleted</p>
