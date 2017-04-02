@@ -10,6 +10,8 @@
   line-height 1.8
   text-align center
   overflow scroll
+  @media screen and (max-width: 768px)
+    line-height 1.5
   &.welcome
     z-index 10000
     background-color $colorBlack
@@ -36,6 +38,10 @@
     text-decoration none
     margin-top $layoutSpace
     border-radius 5px
+  .content-wrapper
+    max-width 800px
+    margin 0 auto
+    margin-bottom: $layoutSpaceHalf
   .legend
     text-align left
     p
