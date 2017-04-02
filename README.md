@@ -8,11 +8,11 @@ The size of the marker represents the number of lines changed, the colors show t
 |<img src="app/assets/images/screen-desktop.jpg" alt="screenshot" />|<img src="app/assets/images/screen-mobile.jpg" alt="screenshot" />|
 | --- | --- |
 
-Built with: <a href="https://aframe.io/" title="Visit page" target="blank">A-Frame</a>
+Built with: <a href="https://aframe.io/" title="Visit page" target="_blank">A-Frame</a>
 
-IP lookup: <a href="https://freegeoip.net/" title="Visit page" target="blank">freegeoip.net API</a>
+IP lookup: <a href="https://freegeoip.net/" title="Visit page" target="_blank">freegeoip.net API</a>
 
-Inspired by: <a href="http://listen.hatnote.com/" target="blank" title="Listen to Wikipedia">Listen to Wikipedia</a>
+Inspired by: <a href="http://listen.hatnote.com/" target="_blank" title="Listen to Wikipedia">Listen to Wikipedia</a>
 
 
 ## Image Credit:
