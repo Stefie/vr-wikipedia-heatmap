@@ -250,8 +250,8 @@ class VRStream extends React.Component {
           </a-assets>
           <Entity
             id="vr-wikipedia-heatmap"
-            geometry="primitive: sphere; radius: 27; segmentsWidth: 18;"
-            material="src: #globe; repeat: -1 1; side: back;"
+            geometry="primitive: sphere; radius: 27; segmentsWidth: 16; segmentsHeight: 16;"
+            material="src: #globe; repeat: -1 1; side: back; fog: false;"
             position="0 0 0">
           </Entity>
           <Locations locations={this.state.locations} />
