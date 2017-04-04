@@ -14,8 +14,8 @@ __IP lookup:__ <a href="https://freegeoip.net/" title="Visit page" target="_blan
 
 __Inspired by:__ <a href="http://rcmap.hatnote.com/#en" target="_blank" title="Wikipedia Recent Changes Map">Wikipedia Recent Changes Map</a>
 
-Just like Hatnote's <a href="http://rcmap.hatnote.com/#en" target="_blank" title="Wikipedia Recent Changes Map">__Wikipedia Recent Changes Map__</a>, this App shows only the edits made by unregistered users which account for only 15% of the actual edits of Wikipedia entries worldwide.
+Just like Hatnote's <a href="http://rcmap.hatnote.com/#en" target="_blank" title="Wikipedia Recent Changes Map">__Wikipedia Recent Changes Map__</a>, this App shows only the edits made by unregistered users which account for only 15% of the actual edits of Wikipedia entries worldwide. This is because Wikipidia doesn't save the IP addresses of registered users.
 
 
-## Image Credit:
+### Image Credit:
 __Equirectangular Earth Map:__ <a href="http://www.shadedrelief.com/natural3/pages/textures.html" title="Visit page" target="blank">Natural Earth III - Tom Patterson</a>
