@@ -1,7 +1,7 @@
 # Wikipedia Recent Changes WebVR Heatmap
 
 This WebVR-Scene shows you the latest 150 anonymous Wikipedia edits mapped on a WebVR-Globe.
-It uses the <a href="https://www.mediawiki.org/wiki/API:Recent_changes_stream" title="Visit API description" target="blank">__Wikipeadia Stream API__</a>.
+It uses the <a href="https://www.mediawiki.org/wiki/API:Recent_changes_stream" title="Visit API description" target="blank">__Wikipedia Stream API__</a>.
 
 The size of the marker represents the number of lines changed, the colors show the different types of edits. The light in the scene is set to the position of the sun at the time you're loading the page.
 
