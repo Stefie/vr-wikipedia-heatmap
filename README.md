@@ -5,7 +5,7 @@ It uses the <a href="https://www.mediawiki.org/wiki/API:Recent_changes_stream" t
 
 The size of the marker represents the number of lines changed, the colors show the different types of edits. The light in the scene is set to the position of the sun at the time you're loading the page.
 
-|<img src="app/assets/images/screen-desktop.jpg" alt="screenshot" />|<img src="app/assets/images/screen-mobile.jpg" alt="screenshot" />|
+|<img src="app/assets/images/screen-desktop.jpg" alt="screenshot" />|<img src="app/assets/images/screen-vr.jpg" alt="screenshot" />|
 | --- | --- |
 
 __Built with:__ <a href="https://aframe.io/" title="Visit page" target="_blank">A-Frame</a> & <a href="https://www.npmjs.com/package/aframe-react" title="Visit page" target="_blank">A-Frame React</a>
