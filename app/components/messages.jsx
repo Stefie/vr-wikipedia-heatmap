@@ -17,7 +17,7 @@ export class Welcome extends React.Component {
           <p className="deleted">Lines deleted</p>
           <p className="flagged">Flagged content</p>
         </div>
-        <p><a onClick={() => this.props.startFunction()} href="#" title="Start" className="start-stream">START STREAM</a></p>
+        <p><span onClick={() => this.props.startFunction()} role="button" title="Start" className="start-stream">START STREAM</span></p>
       </div>
     );
   }
