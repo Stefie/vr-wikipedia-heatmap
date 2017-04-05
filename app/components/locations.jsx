@@ -18,7 +18,7 @@ export default class Locations extends React.Component {
                     key={location.index}
                     geometry={{
                       primitive: 'sphere',
-                      radius: 0.25,
+                      radius: 0.28,
                       segmentsWidth: 12,
                       segmentsHeight: 12
                     }}
