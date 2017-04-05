@@ -44,7 +44,7 @@ class VRStream extends React.Component {
   }
   componentWillMount(){
     this.setState({
-      overlay: <Welcome startFunction={() => this._fetchEdits()} />
+      overlay: <Welcome startFunction={() => this._fetchEdits(true)} />
     });
   }
   componentDidMount(){
@@ -92,7 +92,7 @@ class VRStream extends React.Component {
     if(this.state.isIos && this.state.VRMode && !this.reconnect){
       let _this = this;
       this.reconnect =  setInterval(function() {
-        if(_this.eventsource.readyState == 2) _this._fetchEdits();
+        if(_this.eventsource.readyState == 2) _this._fetchEdits(false);
       }, 500);
     } else if (this.state.isIos && !this.state.VRMode && this.reconnect) {
       // remove eventListener for ios when not in vr-mode
@@ -119,11 +119,10 @@ class VRStream extends React.Component {
       this.reconnect = null;
     }
   }
-  _fetchEdits() {
+  _fetchEdits(indicator) {
     // connect to Wikipedia API Stream
-    this.setState({
-      overlay: <Loading />
-    });
+    if(indicator) this.setState({ overlay: <Loading /> });
+
     this.eventsource = new EventSource("https://stream.wikimedia.org/v2/stream/recentchange");
     this.eventsource.onmessage = (message) => {
       // only add new markers when tab is focused/ visible
