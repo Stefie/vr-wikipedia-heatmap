@@ -24,7 +24,7 @@ export default class Locations extends React.Component {
                     }}
                     position={location.positionStart}
                     material={{color: location.color, shader: 'flat'}}
-                    animation={{property: 'position', dur: 2500, easing: 'easeOutCubic', to: location.position}} />
+                    animation={{property: 'position', dur: 2000, easing: 'easeOutCubic', to: location.position}} />
         }.bind(this))}
       </Entity>
     );

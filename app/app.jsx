@@ -157,7 +157,7 @@ class VRStream extends React.Component {
           type = 'delete';
           radius = -radius;
         }
-        if(radius >= 20) radius = 20;
+        if(radius >= 21) radius = 21;
       }
       // check if there are stored coordinates for ip-address
       if(this.state.ipCoordinates.length){
