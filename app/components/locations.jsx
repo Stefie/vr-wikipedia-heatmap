@@ -18,13 +18,13 @@ export default class Locations extends React.Component {
                     key={location.index}
                     geometry={{
                       primitive: 'sphere',
-                      radius: location.radius,
+                      radius: 0.3,
                       segmentsWidth: 12,
                       segmentsHeight: 12
                     }}
-                    position={location.position}
+                    position={location.positionStart}
                     material={{color: location.color, shader: 'flat'}}
-                    animation={{property: 'geometry.radius', dur: 1500, easing: 'easeOutCubic', to: 0.3}}  />
+                    animation={{property: 'position', dur: 2500, easing: 'easeOutCubic', to: location.position}} />
         }.bind(this))}
       </Entity>
     );

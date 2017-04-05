@@ -144,25 +144,20 @@ class VRStream extends React.Component {
     if (isAnonymous) {
       // Set marker attributes according to type of edit
       let color = '#ffd11a', // yellow
-          radius = 0.5,
+          radius = 5,
           type = 'flag';
 
       if(data.length){
         let dataLengthOld = data.length.old ? data.length.old : 0;
-        radius = (data.length.new - dataLengthOld)/30;
+        radius = (data.length.new - dataLengthOld)/5;
         color = '#00e600', //green
         type = 'add';
         if(radius <= 0){
           color = '#ff0000'; //red
-          radius = -radius,
           type = 'delete';
+          radius = -radius;
         }
-        if(radius < 0.1){
-          radius = 0.1;
-        }
-        if (radius >= 10){
-          radius = 10
-        }
+        if(radius >= 20) radius = 20;
       }
       // check if there are stored coordinates for ip-address
       if(this.state.ipCoordinates.length){
@@ -211,24 +206,29 @@ class VRStream extends React.Component {
     return (false)
   }
   _addLocations(lat, lng, radius, color, type, title) {
+    // calculate marker position on globe
     const index = this.state.edits,
           phi = (90-lat) * (Math.PI/180),
           theta = -((lng+180) * (Math.PI/180)),
-          positionX = -((25 - (index/500)) * Math.sin(phi) * Math.cos(theta)),
-          positionY = ((25 - (index/500)) * Math.cos(phi)),
-          positionZ = ((25 - (index/500)) * Math.sin(phi) * Math.sin(theta) ),
-          position = `${positionX} ${positionY} ${positionZ}`;
+          positionX = -((28 - (index/500)) * Math.sin(phi) * Math.cos(theta)),
+          positionY = ((28 - (index/500)) * Math.cos(phi)),
+          positionZ = ((28 - (index/500)) * Math.sin(phi) * Math.sin(theta) ),
+          positionXstart = -((23 - radius) * Math.sin(phi) * Math.cos(theta)),
+          positionYstart = ((23 - radius) * Math.cos(phi)),
+          positionZstart = ((23 - radius) * Math.sin(phi) * Math.sin(theta) ),
+          position = `${positionX} ${positionY} ${positionZ}`,
+          positionStart = `${positionXstart} ${positionYstart} ${positionZstart}`;
 
     // show a maximum number of 150 locations
     if(this.state.locations.length >= 150){
       this.setState(previousState => ({
-        locations: [...previousState.locations.filter((_, i) => i !== 0), {'position': position, 'index': index, 'radius': radius, 'color': color, 'type': type}],
+        locations: [...previousState.locations.filter((_, i) => i !== 0), {'position': position, 'positionStart': positionStart, 'index': index, 'color': color, 'type': type}],
         edits: previousState.edits + 1,
         editTitle: title
       }));
     } else {
       this.setState(previousState => ({
-        locations: [...previousState.locations, {'position': position, 'index': index, 'radius': radius, 'color': color, 'type': type}],
+        locations: [...previousState.locations, {'position': position, 'positionStart': positionStart, 'index': index, 'color': color, 'type': type}],
         edits: previousState.edits + 1,
         editTitle: title
       }));
@@ -249,7 +249,7 @@ class VRStream extends React.Component {
           </a-assets>
           <Entity
             id="vr-wikipedia-heatmap"
-            geometry="primitive: sphere; radius: 27; segmentsWidth: 16; segmentsHeight: 16;"
+            geometry="primitive: sphere; radius: 30; segmentsWidth: 16; segmentsHeight: 16;"
             material="src: #globe; repeat: -1 1; side: back; fog: false;"
             position="0 0 0">
           </Entity>
