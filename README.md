@@ -10,7 +10,14 @@ The size of the marker represents the number of lines changed, the colors show t
 
 __Built with:__ <a href="https://aframe.io/" title="Visit page" target="_blank">A-Frame</a> & <a href="https://www.npmjs.com/package/aframe-react" title="Visit page" target="_blank">A-Frame React</a>
 
-__IP lookup:__ <a href="https://freegeoip.net/" title="Visit page" target="_blank">freegeoip.net API</a>
+__IP lookup:__ <a href="https://ipstack.com/" title="Visit page" target="_blank">ipstack.com API</a>.
+
+To run this repository locally, you need to:
+- Create a free account on ipstack.com and get a free API key
+- Create an .env file in the project root.
+- Add your API key as an environment variable.
+- Run 'npm start' again.
+
 
 __Inspired by:__ <a href="http://rcmap.hatnote.com/#en" target="_blank" title="Wikipedia Recent Changes Map">Wikipedia Recent Changes Map</a>
 
