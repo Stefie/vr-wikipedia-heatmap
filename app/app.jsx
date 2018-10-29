@@ -174,7 +174,7 @@ class VRStream extends React.Component {
   _getCoordinates(user, radius, color, type, title) {
     const options = {
       //uri: `http://freegeoip.net:${ApiPort}/json/${user}`,
-      uri: `http://api.ipstack.com/${user}?access_key=${process.env.API_KEY}`,
+      uri: `http://api.ipstack.com:${ApiPort}/${user}?access_key=${process.env.API_KEY}`,
       headers: {
         'User-Agent': 'Request-Promise'
       },
